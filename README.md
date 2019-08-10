@@ -1,2 +1,2 @@
 # TodoApp
-TodoApp with .net core + angular +docker
+TodoApp with .net core + angular + docker
