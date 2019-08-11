@@ -9,6 +9,7 @@ namespace TodoApp.Domain.TodoAppContext.Entities
         {
             Email = email;
             Password = password;
+            Notifications = new Dictionary<string, string>();
 
             Validate();
         }
@@ -23,11 +24,6 @@ namespace TodoApp.Domain.TodoAppContext.Entities
             return $"{Id} - {Email}";
         }
 
-        public void RecoveryPassword()
-        {
-
-        }
-
         private bool IsValidEmail(string source)
         {
             return new EmailAddressAttribute().IsValid(source);
@@ -35,9 +31,6 @@ namespace TodoApp.Domain.TodoAppContext.Entities
 
         public void Validate()
         {
-            if (Email.Length < 1)
-                Notifications.Add("Email", "Email must have be inserted.");
-
             if (!IsValidEmail(Email))
                 Notifications.Add("Email", "Email must be valid.");
 

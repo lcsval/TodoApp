@@ -4,14 +4,15 @@ using TodoApp.Domain.TodoAppContext.Enums;
 
 namespace TodoApp.Domain.TodoAppContext.Entities
 {
-    public class Task
+    public class TodoTask
     {
-        public Task(string description, int idUser)
+        public TodoTask(string description, int idUser)
         {
             Description = description;
             IdUser = idUser;
             CreateDate = DateTime.Now;
             Status = EStatus.InProgress;
+            Notifications = new Dictionary<string, string>();
 
             Validate();
         }
@@ -33,6 +34,12 @@ namespace TodoApp.Domain.TodoAppContext.Entities
         public void CompleteTask()
         {
             Status = EStatus.Done;
+            EndDate = DateTime.Now;
+        }
+
+        public void RemoveTask()
+        {
+            Status = EStatus.Removed;
         }
 
         public void Validate()
