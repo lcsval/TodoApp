@@ -1,12 +1,12 @@
-using System;
-using TodoApp.Domain.TodoAppContext.Repositories;
 using Dapper;
-using TodoApp.Infra.TodoAppContext;
 using TodoApp.Domain.TodoAppContext.Entities;
 using System.Threading.Tasks;
-using System.Linq;
+using System.Collections.Generic;
+using TodoApp.Domain.TodoAppContext.Queries;
+using TodoApp.Domain.TodoAppContext.Repositories;
+using System;
 
-namespace TodoApp.Infra.Repositories
+namespace TodoApp.Infra.TodoAppContext.Repositories
 {
     public class TodoTaskRepository : ITodoTaskRepository
     {
@@ -25,7 +25,8 @@ namespace TodoApp.Infra.Repositories
 
         public async Task Save(TodoTask todoTask)
         {
-            if (todoTask.Id > 0) {
+            if (todoTask.Id > 0)
+            {
                 var sql = @"
                     INSERT INTO
                         todotask (description, createdate, status, enddate, iduser)
@@ -34,7 +35,8 @@ namespace TodoApp.Infra.Repositories
 
                 await _context.Connection.ExecuteAsync(sql, todoTask);
             }
-            else {
+            else
+            {
                 var sql = @"
                     UPDATE 
                         todotask 
@@ -49,6 +51,22 @@ namespace TodoApp.Infra.Repositories
 
                 await _context.Connection.ExecuteAsync(sql, todoTask);
             }
+        }
+
+        public async Task<IEnumerable<ListTodoTasksQuery>> Get()
+        {
+            try
+            {
+                var sql = $"select * from public.todotask";
+                return await _context.Connection.QueryAsync<ListTodoTasksQuery>(sql);
+
+            }
+            catch (Exception ex)
+            {
+                var x = ex.Message;
+            }
+
+            return null;
         }
     }
 }

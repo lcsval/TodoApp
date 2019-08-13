@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TodoApp.Domain.TodoAppContext.Services
 {
-    public interface EmailService
+    public interface IEmailService
     {
         void Send(string to, string from, string subject, string body);
     }

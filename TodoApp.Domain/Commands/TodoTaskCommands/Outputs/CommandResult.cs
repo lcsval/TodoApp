@@ -1,10 +1,10 @@
-﻿using TodoApp.Shared.Commands;
+using TodoApp.Shared.Commands;
 
 namespace TodoApp.Domain.Commands.TodoTaskCommands.Outputs
 {
-    public class CreateTodoTaskCommandResult : ICommandResult
+    public class CommandResult : ICommandResult
     {
-        public CreateTodoTaskCommandResult(bool success, string message, object data)
+        public CommandResult(bool success, string message, object data)
         {
             Success = success;
             Message = message;

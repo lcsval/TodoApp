@@ -7,8 +7,8 @@ docker exec -it postgresql psql -U postgres -c "create database todoapp"
 /*
 CREATE TABLE public.user (
        id SERIAL,
-       email VARCHAR(250) NOT NULL,
-       password VARCHAR(250) NOT NULL,
+       email CHARACTER VARYING(255) NOT NULL,
+       password CHARACTER VARYING(255) NOT NULL,
        CONSTRAINT pk_user PRIMARY KEY (id)
 );
 insert into public.user (email, password) values ('lucas_val@outlook.com', '123456');
@@ -16,7 +16,7 @@ insert into public.user (email, password) values ('lucas_val@outlook.com', '1234
 
 CREATE TABLE public.todotask (
        id SERIAL,
-       description VARCHAR(250) NOT NULL, 
+       description CHARACTER VARYING(255) NOT NULL, 
        createdate TIMESTAMP NOT NULL,
        status INTEGER NOT NULL,
        enddate TIMESTAMP,

@@ -16,8 +16,16 @@ namespace TodoApp.Infra.TodoAppContext
         }
 
         public void Dispose() {
-            if (Connection.State != ConnectionState.Closed)
-                Connection.Close();
+            try
+            {
+                if (Connection.State != ConnectionState.Closed)
+                    Connection.Close();
+            }
+            catch (Exception ex)
+            {
+                var x = ex.Message;
+            }
+
         }
     }
 }

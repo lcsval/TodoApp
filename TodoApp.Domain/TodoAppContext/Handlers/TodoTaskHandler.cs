@@ -12,7 +12,6 @@ namespace TodoApp.Domain.TodoAppContext.Handlers
 {
     public class TodoTaskHandler : ICommandHandler<CreateTodoTaskCommand>
     {
-
         private readonly ITodoTaskRepository _repository;
 
         public TodoTaskHandler(ITodoTaskRepository repository)
@@ -27,14 +26,17 @@ namespace TodoApp.Domain.TodoAppContext.Handlers
 
             var todoTask = new TodoTask(command.Description, command.IdUser);
 
-            //Validate
-
             if (command.Notifications.Count > 0)
-                return null;
+                return new CommandResult(false, "Error", command.Notifications);
 
             await _repository.Save(todoTask);
 
-            return new CreateTodoTaskCommandResult(todoTask.Id, todoTask.Description, todoTask.IdUser, todoTask.CreateDate, (int)todoTask.Status);
+            return new CommandResult(true, "", new
+            {
+                Id = todoTask.Id,
+                Description = todoTask.Description,
+                IdUser = todoTask.IdUser
+            });
         }
     }
 }

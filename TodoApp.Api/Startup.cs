@@ -1,34 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using TodoApp.Domain.TodoAppContext.Handlers;
+using TodoApp.Domain.TodoAppContext.Repositories;
+using TodoApp.Domain.TodoAppContext.Services;
+using TodoApp.Infra.TodoAppContext;
+using TodoApp.Infra.TodoAppContext.Repositories;
+using TodoApp.Infra.TodoAppContext.Services;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using TodoApp.Shared;
 
 namespace TodoApp.Api
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public static IConfiguration Configuration { get; set; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            //add package.json //dotnet add package Microsoft.Extensions.Configuration.Json
+            var builder = new ConfigurationBuilder()
+              .SetBasePath(Directory.GetCurrentDirectory())
+              .AddJsonFile("settings.json");
+
+            Configuration = builder.Build();
+
+            services.AddMvc();
+
+            //add compression: //dotnet add package Microsoft.AspNetCore.ResponseCompression 
+            //services.AddResponseCompression();
+
+            services.AddScoped<TodoAppDataContext, TodoAppDataContext>();
+            services.AddTransient<ITodoTaskRepository, TodoTaskRepository>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<TodoTaskHandler, TodoTaskHandler>();
+
+            //documente api - project api:
+            //dotnet add package Swashbuckle.AspNetCore
+            //services.AddSwaggerGen(x => {
+            //  x.SwaggerDoc("v1", new Info { Title = "Todo App", Version = "V1" })
+            //});
+
+            Settings.ConnectionString = $"{Configuration["connectionString"]}";
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+
+            app.UseMvc();
+
+            //app.UseResponseCompression();
+
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c => {
+            //  c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoApp V1");
+            //});
         }
     }
 }
